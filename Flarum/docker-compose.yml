@@ -1,0 +1,44 @@
+version: '3.1'
+services:
+  web:
+    image: crazymax/flarum:latest
+    environment:
+      FLARUM_DEBUG: "false"
+      FLARUM_BASE_URL: "http://127.0.0.1:90" # Must be modified for each project
+      FLARUM_FORUM_TITLE: "Mael's Forum" # Must be modified for each project
+      DB_HOST: db
+      DB_PORT: 3306 # Must be modified for each project
+      DB_NAME: # Must be modified for each project
+      DB_USER: # Must be modified for each project
+      DB_PASSWORD: # Must be modified for each project
+    ports:
+      - "90:8000" # Must be modified for each project
+    volumes:
+      - web-data:/data
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASS}
+    volumes:
+      - db-data:/var/lib/mysql
+    restart: always
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASS}
+    ports:
+      - "91:80" # Must be modified for each project
+
+volumes:
+  web-data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/mael/data/projectname/data/flarum' # Must be modified for each project
+  db-data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/mael/data/projectname/data/mysql' # Must be modified for each project
